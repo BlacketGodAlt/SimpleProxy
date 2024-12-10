@@ -15,11 +15,30 @@ if (isset($_GET['url'])) {
         if (curl_errno($ch)) {
             echo "Error: " . curl_error($ch);
         } else {
-            // Set the appropriate content type
+            // Rewrite links to pass through the proxy
+            $proxyBase = basename(__FILE__); // Name of the proxy file
             $contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+
             header("Content-Type: $contentType");
 
-            // Output the response
+            // Use regex to rewrite links in the fetched content
+            $response = preg_replace_callback(
+                '/(href|src)=(["\'])(.*?)\2/i',
+                function ($matches) use ($proxyBase) {
+                    $attr = $matches[1]; // href or src
+                    $quote = $matches[2]; // " or '
+                    $link = $matches[3]; // URL
+
+                    // Only rewrite absolute URLs
+                    if (filter_var($link, FILTER_VALIDATE_URL)) {
+                        $link = htmlspecialchars("?url=" . urlencode($link));
+                    }
+
+                    return "$attr=$quote$link$quote";
+                },
+                $response
+            );
+
             echo $response;
         }
 
