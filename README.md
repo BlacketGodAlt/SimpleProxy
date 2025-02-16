@@ -19,5 +19,5 @@ Steps:
 2. Extract the folder containing the file from the ZIP file.
 3. Open your terminal and navigate to the directory using the `cd` command. If you're unsure how to do this, there are many YouTube tutorials about it.
 4. Type or copy & paste `php -S localhost:8000`.
-5. Go to `http://localhost:8000/proxy.php?url=https://example.com`. Your proxy should be deployed there.
+5. Go to `http://localhost:8000/proxy.php`. Your proxy should be deployed there.
 6. Congrats! You've locally deployed this to your computer!
